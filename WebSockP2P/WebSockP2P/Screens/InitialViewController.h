@@ -12,5 +12,6 @@
 
 @property (nonatomic, weak) IBOutlet UITextField* nameField;
 @property (nonatomic, weak) IBOutlet UIButton* startButton;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView* activity;
 
 @end

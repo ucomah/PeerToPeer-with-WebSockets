@@ -1,13 +1,14 @@
 //
-//  ListViewController.h
+//  PrefixHeader.pch
 //  WebSockP2P
 //
 //  Created by Evgeniy Melkov on 07.05.16.
 //  Copyright © 2016 Eugene Melkov. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
 
-@interface ListViewController : UITableViewController
+#include "WSAgent.h"
 
-@end
+#endif /* PrefixHeader_pch */

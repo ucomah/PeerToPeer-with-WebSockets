@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A027F95B1CDDFA5400393FA0 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A027F95A1CDDFA5400393FA0 /* ListViewController.m */; };
+		A027F95E1CDE07C500393FA0 /* NetUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = A027F95D1CDE07C500393FA0 /* NetUtils.m */; };
 		A09681F41CDD087D005AF02D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A09681F31CDD087D005AF02D /* main.m */; };
 		A09681F71CDD087D005AF02D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A09681F61CDD087D005AF02D /* AppDelegate.m */; };
 		A09682001CDD087D005AF02D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A09681FE1CDD087D005AF02D /* Main.storyboard */; };
@@ -29,10 +31,15 @@
 		A09682421CDD0CBC005AF02D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A09682411CDD0CBC005AF02D /* UIKit.framework */; };
 		A09682441CDD0CC8005AF02D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A09682431CDD0CC8005AF02D /* Foundation.framework */; };
 		A09682461CDD0CD6005AF02D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A09682451CDD0CD6005AF02D /* libz.tbd */; };
-		A09682491CDD177F005AF02D /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A09682481CDD177F005AF02D /* ListViewController.m */; };
+		A096824C1CDD1D2E005AF02D /* MEServiceFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = A096824B1CDD1D2E005AF02D /* MEServiceFinder.m */; };
+		A09682501CDD1EEE005AF02D /* UIApplication+Backgrounding.m in Sources */ = {isa = PBXBuildFile; fileRef = A096824F1CDD1EEE005AF02D /* UIApplication+Backgrounding.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A027F9591CDDFA5400393FA0 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
+		A027F95A1CDDFA5400393FA0 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		A027F95C1CDE07C500393FA0 /* NetUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetUtils.h; sourceTree = "<group>"; };
+		A027F95D1CDE07C500393FA0 /* NetUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetUtils.m; sourceTree = "<group>"; };
 		A09681EF1CDD087D005AF02D /* WebSockP2P.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebSockP2P.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A09681F31CDD087D005AF02D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A09681F51CDD087D005AF02D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -74,8 +81,11 @@
 		A09682411CDD0CBC005AF02D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A09682431CDD0CC8005AF02D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A09682451CDD0CD6005AF02D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		A09682471CDD177F005AF02D /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
-		A09682481CDD177F005AF02D /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		A096824A1CDD1D2E005AF02D /* MEServiceFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEServiceFinder.h; sourceTree = "<group>"; };
+		A096824B1CDD1D2E005AF02D /* MEServiceFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEServiceFinder.m; sourceTree = "<group>"; };
+		A096824E1CDD1EEE005AF02D /* UIApplication+Backgrounding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+Backgrounding.h"; sourceTree = "<group>"; };
+		A096824F1CDD1EEE005AF02D /* UIApplication+Backgrounding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+Backgrounding.m"; sourceTree = "<group>"; };
+		A0A12DC31CDDE0B400A619AC /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PrefixHeader.pch; path = WebSockP2P/PrefixHeader.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +107,7 @@
 		A09681E61CDD087D005AF02D = {
 			isa = PBXGroup;
 			children = (
+				A0A12DC31CDDE0B400A619AC /* PrefixHeader.pch */,
 				A09681F11CDD087D005AF02D /* WebSockP2P */,
 				A096823C1CDD0C80005AF02D /* Frameworks */,
 				A09681F01CDD087D005AF02D /* Products */,
@@ -114,6 +125,7 @@
 		A09681F11CDD087D005AF02D /* WebSockP2P */ = {
 			isa = PBXGroup;
 			children = (
+				A096824D1CDD1EEE005AF02D /* Categories */,
 				A09682131CDD0AD6005AF02D /* Classes */,
 				A09682141CDD0AD6005AF02D /* Libs */,
 				A096820F1CDD09A6005AF02D /* Screens */,
@@ -141,8 +153,8 @@
 			children = (
 				A09682101CDD09A6005AF02D /* InitialViewController.h */,
 				A09682111CDD09A6005AF02D /* InitialViewController.m */,
-				A09682471CDD177F005AF02D /* ListViewController.h */,
-				A09682481CDD177F005AF02D /* ListViewController.m */,
+				A027F9591CDDFA5400393FA0 /* ListViewController.h */,
+				A027F95A1CDDFA5400393FA0 /* ListViewController.m */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -150,6 +162,10 @@
 		A09682131CDD0AD6005AF02D /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A027F95C1CDE07C500393FA0 /* NetUtils.h */,
+				A027F95D1CDE07C500393FA0 /* NetUtils.m */,
+				A096824A1CDD1D2E005AF02D /* MEServiceFinder.h */,
+				A096824B1CDD1D2E005AF02D /* MEServiceFinder.m */,
 				A09682151CDD0AE5005AF02D /* WSAgent.h */,
 				A09682161CDD0AE5005AF02D /* WSAgent.m */,
 				A09682181CDD0AFA005AF02D /* WSPeer.h */,
@@ -214,6 +230,15 @@
 			);
 			name = Frameworks;
 			path = WebSockP2P;
+			sourceTree = "<group>";
+		};
+		A096824D1CDD1EEE005AF02D /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				A096824E1CDD1EEE005AF02D /* UIApplication+Backgrounding.h */,
+				A096824F1CDD1EEE005AF02D /* UIApplication+Backgrounding.m */,
+			);
+			path = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -288,12 +313,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				A09682121CDD09A6005AF02D /* InitialViewController.m in Sources */,
+				A027F95E1CDE07C500393FA0 /* NetUtils.m in Sources */,
 				A09682381CDD0B0F005AF02D /* PSWebSocketNetworkThread.m in Sources */,
 				A09682371CDD0B0F005AF02D /* PSWebSocketInflater.m in Sources */,
 				A09682391CDD0B0F005AF02D /* PSWebSocketServer.m in Sources */,
 				A096823B1CDD0B0F005AF02D /* SRWebSocket.m in Sources */,
-				A09682491CDD177F005AF02D /* ListViewController.m in Sources */,
 				A096823A1CDD0B0F005AF02D /* PSWebSocketUTF8Decoder.m in Sources */,
+				A096824C1CDD1D2E005AF02D /* MEServiceFinder.m in Sources */,
+				A027F95B1CDDFA5400393FA0 /* ListViewController.m in Sources */,
 				A09682351CDD0B0F005AF02D /* PSWebSocketDeflater.m in Sources */,
 				A09682171CDD0AE5005AF02D /* WSAgent.m in Sources */,
 				A09682341CDD0B0F005AF02D /* PSWebSocketBuffer.m in Sources */,
@@ -302,6 +329,7 @@
 				A09681F41CDD087D005AF02D /* main.m in Sources */,
 				A09682331CDD0B0F005AF02D /* PSWebSocket.m in Sources */,
 				A096821A1CDD0AFA005AF02D /* WSPeer.m in Sources */,
+				A09682501CDD1EEE005AF02D /* UIApplication+Backgrounding.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +444,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = $PROJECT_DIR/$PROJECT_NAME/PrefixHeader.pch;
 				INFOPLIST_FILE = WebSockP2P/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -429,6 +459,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = $PROJECT_DIR/$PROJECT_NAME/PrefixHeader.pch;
 				INFOPLIST_FILE = WebSockP2P/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -456,6 +488,7 @@
 				A096820B1CDD087D005AF02D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

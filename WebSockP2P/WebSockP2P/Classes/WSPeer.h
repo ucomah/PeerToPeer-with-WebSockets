@@ -8,6 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+@class SRWebSocket;
+@class PSWebSocket;
+
 @interface WSPeer : NSObject
+
+@property (nonatomic, readonly) NSURL* url;
+@property (nonatomic, strong) NSString* bonjourName;
+@property (nonatomic, readonly) BOOL isIncomingPeer;
+
+- (instancetype)initWithIncomingConnection:(PSWebSocket*)sock;
+- (instancetype)initWithOutgoingConnection:(SRWebSocket*)sock;
+
+- (void)closeConnection;
+- (NSString*)host;
+- (void)send:(id)data;
 
 @end
