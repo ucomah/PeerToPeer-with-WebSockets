@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, WSAgentState) {
 
 - (void)agent:(WSAgent*)agent didAddPeer:(WSPeer*)peer;
 - (void)agent:(WSAgent*)agent didRemovePeer:(WSPeer*)peer;
-// In most cases, called when peer bonjour name is updated 
+// In most cases, called when peer bonjour name is updated or vice versa
 - (void)agent:(WSAgent*)agent didUpdatePeer:(WSPeer *)peer;
 
 @end
@@ -70,7 +70,12 @@ typedef NS_ENUM(NSInteger, WSAgentState) {
 
 @property (nonatomic, assign) id<WSAgentDelegate>delegate;
 
++ (NSURL*)defaultPeerURLWithAddreessOrHost:(NSString*)addr;
+
 - (void)startListeningWithCompletion:(void(^)(NSError* error))handler;
 - (void)stopListening;
+
+- (void)startBonjourDiscovering;
+- (void)stopBonjourDiscovering;
 
 @end

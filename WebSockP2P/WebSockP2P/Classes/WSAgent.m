@@ -12,9 +12,10 @@
 #import "WSPeer.h"
 #import "NetUtils.h"
 #import "UIApplication+Backgrounding.h"
+#import "MEServiceFinder.h"
 
 
-@interface WSAgent () <NSNetServiceDelegate, PSWebSocketServerDelegate, SRWebSocketDelegate>
+@interface WSAgent () <NSNetServiceDelegate, PSWebSocketServerDelegate, SRWebSocketDelegate, MEServiceFinderDelegate>
 @property (nonatomic, strong) NSMutableArray* allPeers;
 @end
 
@@ -31,6 +32,7 @@ typedef void(^WSVoidBlock)();
     BOOL isNetServiceRunning;
     BOOL isSocketServerRunning;
     NSMutableDictionary* allOutgoingSockets; //of SRWebSocket
+    MEServiceFinder* finder; //Bonjour services finder
 }
 
 + (instancetype)sharedInstance {
@@ -63,6 +65,10 @@ typedef void(^WSVoidBlock)();
 //-------------------------------------------------------------------------------
 #pragma mark - Core methods
 //-------------------------------------------------------------------------------
+
++ (NSURL*)defaultPeerURLWithAddreessOrHost:(NSString*)addr {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"ws://%@:%d", addr, [[self sharedInstance] serverPort]]];
+}
 
 + (NSError*)errorWithCode:(NSInteger)code description:(NSString*)descr {
     return [NSError errorWithDomain:NSStringFromClass([self class])
@@ -168,6 +174,55 @@ typedef void(^WSVoidBlock)();
     [self stopWebSocketServerWithCompletion:^{
         [self performStopActions];
     }];
+}
+
+#pragma mark Discover devices
+
+- (void)startBonjourDiscovering {
+    if (finder) {
+        [finder stop];
+        finder = nil;
+    }
+    
+    finder = [[MEServiceFinder alloc] initWithType:self.bonjourServiceType andDomain:self.bonjourServiceDomain];
+    finder.delegate = self;
+    [finder start];
+}
+
+- (void)stopBonjourDiscovering {
+    [finder stop];
+}
+
+#pragma mark MEServiceFinderDelegate
+
+- (void)findServices:(MEServiceFinder*)theFindServices didFindService:(MEService*)theService {
+    //Forbid conencting to myself
+    if ([theService.ipAddress isEqualToString:[NetUtils localIPAddress]]) {
+        return;
+    }
+    
+    //Check if new service ip address is present in the peers list already
+    WSPeer* peer = [self peerForHost:theService.hostName];
+    if (peer) {
+        [self updatePeer:peer withBonjourServuce:theService];
+        return;
+    }
+    peer = [self peerForHost:theService.ipAddress];
+    if (peer) {
+        [self updatePeer:peer withBonjourServuce:theService];
+        return;
+    }
+    //If no peer found - create a new peer instance
+    peer = [[WSPeer alloc] initWithBonjourService:theService];
+    [self addPeer:peer];
+}
+
+- (void)findServices:(MEServiceFinder*)theFindServices didLoseService:(MEService*)theService {
+    
+}
+
+- (void)findServices:(MEServiceFinder*)theFindServices didFailToSearch:(NSDictionary *)theErrors {
+    NSLog(@"Failed to search for Baonjour services");
 }
 
 //-------------------------------------------------------------------------------
@@ -286,7 +341,7 @@ typedef void(^WSVoidBlock)();
         }
     }
     //new connection
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"ws://%@:%d", host, self.serverPort]];
+    NSURL* url = [self.class defaultPeerURLWithAddreessOrHost:host];
     sock = [[SRWebSocket alloc] initWithURL:url
                                   protocols:@[self.serverProtocol]];
     sock.delegate = self;
@@ -394,8 +449,16 @@ typedef void(^WSVoidBlock)();
 - (void)addPeer:(WSPeer*)peer {
     if (peer) {
         @synchronized (self) {
+            //Check if peers contains bonjour service
+            WSPeer* existingPeer = nil;
             for (WSPeer* p in _allPeers) {
-                [p.host isEqualToString:peer.host];
+                if ([p.host isEqualToString:peer.host]) {
+                    existingPeer = p;
+                    break;
+                }
+            }
+            if (existingPeer) {
+                [self updatePeer:existingPeer withPeer:peer];
                 return;
             }
             [_allPeers addObject:peer];
@@ -430,6 +493,27 @@ typedef void(^WSVoidBlock)();
             }
         }
         return nil;
+    }
+}
+
+- (void)updatePeer:(WSPeer*)existingPeer withPeer:(WSPeer*)newPeer {
+    if (!existingPeer || !newPeer) {
+        return;
+    }
+    if ([existingPeer updateWithPeer:newPeer]) {
+        if ([self.delegate respondsToSelector:@selector(agent:didUpdatePeer:)]) {
+            [self.delegate agent:self didUpdatePeer:existingPeer];
+        }
+    }
+}
+
+- (void)updatePeer:(WSPeer*)peer withBonjourServuce:(MEService*)service {
+    if (!peer) {
+        return;
+    }
+    peer.bjService = service;
+    if ([_delegate respondsToSelector:@selector(agent:didUpdatePeer:)]) {
+        [_delegate agent:self didUpdatePeer:peer];
     }
 }
 
