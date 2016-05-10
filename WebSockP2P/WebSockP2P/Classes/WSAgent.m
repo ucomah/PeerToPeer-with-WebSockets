@@ -437,12 +437,11 @@ typedef void(^WSVoidBlock)();
 }
 
 - (void)closeAllConnections {
-    //TODO: Check if "web socket is closed" delegate call will be executed
     @synchronized (self) {
         [_allPeers enumerateObjectsUsingBlock:^(__kindof WSPeer*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj closeConnection];
         }];
-//        [_allPeers removeAllObjects];
+        [_allPeers removeAllObjects];
     }
 }
 
