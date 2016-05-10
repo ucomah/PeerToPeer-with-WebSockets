@@ -30,6 +30,7 @@
 
 - (void)closeConnection;
 - (void)send:(id)data;
+- (BOOL)isConnected;
 
 - (BOOL)updateWithPeer:(WSPeer*)inPeer;
 

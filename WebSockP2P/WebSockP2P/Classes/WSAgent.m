@@ -91,9 +91,9 @@ typedef void(^WSVoidBlock)();
         }];
     }];
     [[UIApplication sharedApplication] startFineLengthBackgroundBlock:^{
-        while (1) {
-            [NSThread sleepForTimeInterval:1.0];
-        }
+//        while (1) {
+//            [NSThread sleepForTimeInterval:1.0];
+//        }
     }];
 }
 

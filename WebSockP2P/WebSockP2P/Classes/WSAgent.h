@@ -78,4 +78,8 @@ typedef NS_ENUM(NSInteger, WSAgentState) {
 - (void)startBonjourDiscovering;
 - (void)stopBonjourDiscovering;
 
+- (void)connectToHost:(NSString*)host;
+- (void)sendSome:(id)data toPeer:(WSPeer*)peer;
+- (void)disconnectPeer:(WSPeer*)peer;
+
 @end

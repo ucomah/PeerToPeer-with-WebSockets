@@ -104,6 +104,10 @@
     }
 }
 
+- (BOOL)isConnected {
+    return _wsInPeer || _wsOutPeer;
+}
+
 - (BOOL)updateWithPeer:(WSPeer *)peer {
     if (!peer) {
         return NO;
