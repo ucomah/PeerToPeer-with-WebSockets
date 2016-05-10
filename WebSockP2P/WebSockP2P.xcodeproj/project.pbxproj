@@ -33,6 +33,9 @@
 		A09682461CDD0CD6005AF02D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A09682451CDD0CD6005AF02D /* libz.tbd */; };
 		A096824C1CDD1D2E005AF02D /* MEServiceFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = A096824B1CDD1D2E005AF02D /* MEServiceFinder.m */; };
 		A09682501CDD1EEE005AF02D /* UIApplication+Backgrounding.m in Sources */ = {isa = PBXBuildFile; fileRef = A096824F1CDD1EEE005AF02D /* UIApplication+Backgrounding.m */; };
+		A09FADEC1CE25A2500E3FB9D /* UIAlertController+DefaultAlerts.m in Sources */ = {isa = PBXBuildFile; fileRef = A09FADEB1CE25A2500E3FB9D /* UIAlertController+DefaultAlerts.m */; };
+		A09FADEF1CE25B1B00E3FB9D /* UIApplication+TopMostController.m in Sources */ = {isa = PBXBuildFile; fileRef = A09FADEE1CE25B1B00E3FB9D /* UIApplication+TopMostController.m */; };
+		A0F467361CE0AD5B00E5DECB /* DevicesListTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A0F467351CE0AD5B00E5DECB /* DevicesListTableCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,7 +88,13 @@
 		A096824B1CDD1D2E005AF02D /* MEServiceFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEServiceFinder.m; sourceTree = "<group>"; };
 		A096824E1CDD1EEE005AF02D /* UIApplication+Backgrounding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+Backgrounding.h"; sourceTree = "<group>"; };
 		A096824F1CDD1EEE005AF02D /* UIApplication+Backgrounding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+Backgrounding.m"; sourceTree = "<group>"; };
-		A0A12DC31CDDE0B400A619AC /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PrefixHeader.pch; path = WebSockP2P/PrefixHeader.pch; sourceTree = "<group>"; };
+		A09FADEA1CE25A2500E3FB9D /* UIAlertController+DefaultAlerts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+DefaultAlerts.h"; sourceTree = "<group>"; };
+		A09FADEB1CE25A2500E3FB9D /* UIAlertController+DefaultAlerts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+DefaultAlerts.m"; sourceTree = "<group>"; };
+		A09FADED1CE25B1B00E3FB9D /* UIApplication+TopMostController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+TopMostController.h"; sourceTree = "<group>"; };
+		A09FADEE1CE25B1B00E3FB9D /* UIApplication+TopMostController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+TopMostController.m"; sourceTree = "<group>"; };
+		A0A12DC31CDDE0B400A619AC /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		A0F467341CE0AD5B00E5DECB /* DevicesListTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DevicesListTableCell.h; sourceTree = "<group>"; };
+		A0F467351CE0AD5B00E5DECB /* DevicesListTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DevicesListTableCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +116,6 @@
 		A09681E61CDD087D005AF02D = {
 			isa = PBXGroup;
 			children = (
-				A0A12DC31CDDE0B400A619AC /* PrefixHeader.pch */,
 				A09681F11CDD087D005AF02D /* WebSockP2P */,
 				A096823C1CDD0C80005AF02D /* Frameworks */,
 				A09681F01CDD087D005AF02D /* Products */,
@@ -134,7 +142,6 @@
 				A09681FE1CDD087D005AF02D /* Main.storyboard */,
 				A09682011CDD087D005AF02D /* Assets.xcassets */,
 				A09682031CDD087D005AF02D /* LaunchScreen.storyboard */,
-				A09682061CDD087D005AF02D /* Info.plist */,
 				A09681F21CDD087D005AF02D /* Supporting Files */,
 			);
 			path = WebSockP2P;
@@ -143,6 +150,8 @@
 		A09681F21CDD087D005AF02D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A09682061CDD087D005AF02D /* Info.plist */,
+				A0A12DC31CDDE0B400A619AC /* PrefixHeader.pch */,
 				A09681F31CDD087D005AF02D /* main.m */,
 			);
 			name = "Supporting Files";
@@ -151,6 +160,8 @@
 		A096820F1CDD09A6005AF02D /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				A0F467341CE0AD5B00E5DECB /* DevicesListTableCell.h */,
+				A0F467351CE0AD5B00E5DECB /* DevicesListTableCell.m */,
 				A09682101CDD09A6005AF02D /* InitialViewController.h */,
 				A09682111CDD09A6005AF02D /* InitialViewController.m */,
 				A027F9591CDDFA5400393FA0 /* ListViewController.h */,
@@ -235,6 +246,10 @@
 		A096824D1CDD1EEE005AF02D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				A09FADED1CE25B1B00E3FB9D /* UIApplication+TopMostController.h */,
+				A09FADEE1CE25B1B00E3FB9D /* UIApplication+TopMostController.m */,
+				A09FADEA1CE25A2500E3FB9D /* UIAlertController+DefaultAlerts.h */,
+				A09FADEB1CE25A2500E3FB9D /* UIAlertController+DefaultAlerts.m */,
 				A096824E1CDD1EEE005AF02D /* UIApplication+Backgrounding.h */,
 				A096824F1CDD1EEE005AF02D /* UIApplication+Backgrounding.m */,
 			);
@@ -273,6 +288,11 @@
 					A09681EE1CDD087D005AF02D = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = EL7K2G689G;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -318,9 +338,11 @@
 				A09682371CDD0B0F005AF02D /* PSWebSocketInflater.m in Sources */,
 				A09682391CDD0B0F005AF02D /* PSWebSocketServer.m in Sources */,
 				A096823B1CDD0B0F005AF02D /* SRWebSocket.m in Sources */,
+				A09FADEC1CE25A2500E3FB9D /* UIAlertController+DefaultAlerts.m in Sources */,
 				A096823A1CDD0B0F005AF02D /* PSWebSocketUTF8Decoder.m in Sources */,
 				A096824C1CDD1D2E005AF02D /* MEServiceFinder.m in Sources */,
 				A027F95B1CDDFA5400393FA0 /* ListViewController.m in Sources */,
+				A0F467361CE0AD5B00E5DECB /* DevicesListTableCell.m in Sources */,
 				A09682351CDD0B0F005AF02D /* PSWebSocketDeflater.m in Sources */,
 				A09682171CDD0AE5005AF02D /* WSAgent.m in Sources */,
 				A09682341CDD0B0F005AF02D /* PSWebSocketBuffer.m in Sources */,
@@ -330,6 +352,7 @@
 				A09682331CDD0B0F005AF02D /* PSWebSocket.m in Sources */,
 				A096821A1CDD0AFA005AF02D /* WSPeer.m in Sources */,
 				A09682501CDD1EEE005AF02D /* UIApplication+Backgrounding.m in Sources */,
+				A09FADEF1CE25B1B00E3FB9D /* UIApplication+TopMostController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,13 +2,15 @@
 //  ListViewController.m
 //  WebSockP2P
 //
-//  Created by Evgeniy Melkov on 07.05.16.
+//  Created by Eugene Melkov on 07.05.16.
 //  Copyright © 2016 Eugene Melkov. All rights reserved.
 //
 
 #import "ListViewController.h"
+#import "DevicesListTableCell.h"
+#import "WSPeer.h"
 
-@interface ListViewController ()
+@interface ListViewController () <WSAgentDelegate>
 
 @end
 
@@ -17,86 +19,91 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.title = @"Discovered devices";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [WSAgent sharedInstance].delegate = self;
+    [[WSAgent sharedInstance] startBonjourDiscovering];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[WSAgent sharedInstance] stopBonjourDiscovering];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - WSAgent delegate
+
+- (void)agent:(WSAgent *)agent didAddPeer:(WSPeer *)peer {
+    [self.tableView reloadData];
+}
+
+- (void)agent:(WSAgent *)agent didUpdatePeer:(WSPeer *)peer {
+    [self.tableView reloadData];
+}
+
+- (void)agent:(WSAgent *)agent didRemovePeer:(WSPeer *)peer {
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
+    return [WSAgent sharedInstance].allPeers.count;
 }
 
-/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    DevicesListTableCell *cell = (DevicesListTableCell*)[tableView dequeueReusableCellWithIdentifier:@"DevicesListViewCell" forIndexPath:indexPath];
     
-    // Configure the cell...
+    if (indexPath.row % 2 == 0) {
+        cell.backgroundView = nil;
+    }
+    else {
+        UIView* bg = [[UIView alloc] initWithFrame:cell.contentView.bounds];
+        bg.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.7f];
+        cell.backgroundView = bg;
+    }
+    
+    WSPeer* peer = [[WSAgent sharedInstance].allPeers objectAtIndex:indexPath.row];
+    cell.hostNameLabel.text = [peer host];
+    
+    [cell setIsConnected:peer.isConnected];
     
     return cell;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        void(^showDetails)(WSPeer* peer) = ^(WSPeer* peer) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            });
+        };
+        //Connect if not connected
+        WSPeer* peer = [[WSAgent sharedInstance].allPeers objectAtIndex:indexPath.row];
+        if (![peer isConnected]) {
+            [[WSAgent sharedInstance] connectToHost:peer.host withCompletion:^(WSPeer *peer, NSError *error) {
+                if (error) {
+                    [UIAlertController alertWithError:error withCompletion:nil];
+                    return ;
+                }
+                showDetails(peer);
+            }];
+        }
+        showDetails(peer);
+    });
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

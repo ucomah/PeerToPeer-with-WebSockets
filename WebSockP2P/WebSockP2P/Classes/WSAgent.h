@@ -20,10 +20,12 @@ typedef NS_ENUM(NSInteger, WSAgentState) {
 #define DEFAULT_BONJOUR_SERVICE_NAME @"TestServer"
 #define DEFAULT_BONJOUR_SERVICE_DOMAIN @"local."
 
-
-
 @class WSAgent;
 @class WSPeer;
+
+typedef void(^WSErrorBlock)(NSError* error);
+typedef void(^WSVoidBlock)();
+typedef void(^WSPeerConnectBlock)(WSPeer* peer, NSError* error);
 
 @protocol WSAgentDelegate <NSObject>
 @optional
@@ -34,6 +36,7 @@ typedef NS_ENUM(NSInteger, WSAgentState) {
 - (void)agent:(WSAgent*)agent didRemovePeer:(WSPeer*)peer;
 // In most cases, called when peer bonjour name is updated or vice versa
 - (void)agent:(WSAgent*)agent didUpdatePeer:(WSPeer *)peer;
+- (void)agent:(WSAgent*)agent didReceiveError:(NSError*)error forPeer:(WSPeer*)peer;
 
 @end
 
@@ -78,7 +81,7 @@ typedef NS_ENUM(NSInteger, WSAgentState) {
 - (void)startBonjourDiscovering;
 - (void)stopBonjourDiscovering;
 
-- (void)connectToHost:(NSString*)host;
+- (void)connectToHost:(NSString*)host withCompletion:(WSPeerConnectBlock)completion;
 - (void)sendSome:(id)data toPeer:(WSPeer*)peer;
 - (void)disconnectPeer:(WSPeer*)peer;
 

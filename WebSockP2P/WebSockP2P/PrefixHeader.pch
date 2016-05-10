@@ -9,6 +9,8 @@
 #ifndef PrefixHeader_pch
 #define PrefixHeader_pch
 
-#include "WSAgent.h"
+#import "WSAgent.h"
+#import "UIApplication+TopMostController.h"
+#import "UIAlertController+DefaultAlerts.h"
 
 #endif /* PrefixHeader_pch */

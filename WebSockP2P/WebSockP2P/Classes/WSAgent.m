@@ -19,9 +19,6 @@
 @property (nonatomic, strong) NSMutableArray* allPeers;
 @end
 
-typedef void(^WSErrorBlock)(NSError* error);
-typedef void(^WSVoidBlock)();
-
 @implementation WSAgent {
     NSNetService* netService; //bonjour net service
     PSWebSocketServer* wsServer;
@@ -33,6 +30,7 @@ typedef void(^WSVoidBlock)();
     BOOL isSocketServerRunning;
     NSMutableDictionary* allOutgoingSockets; //of SRWebSocket
     MEServiceFinder* finder; //Bonjour services finder
+    NSMutableDictionary* hostsWaitingForConnection; //list of peers waiting to beconnected or error // of WSPeer
 }
 
 + (instancetype)sharedInstance {
@@ -58,6 +56,7 @@ typedef void(^WSVoidBlock)();
         bonjourLaunchBlock = nil;
         _allPeers = [NSMutableArray new];
         allOutgoingSockets = [NSMutableDictionary new];
+        hostsWaitingForConnection = [NSMutableDictionary new];
     }
     return self;
 }
@@ -323,14 +322,15 @@ typedef void(^WSVoidBlock)();
 #pragma mark - Web Sockets Client
 //-------------------------------------------------------------------------------
 
-- (void)connectToHost:(NSString*)host {
-    //Check if already has a connection with this host
+- (void)connectToHost:(NSString*)host withCompletion:(WSPeerConnectBlock)completion {
     WSPeer* peer = [self peerForHost:host];
-    if (peer) {
+    if (peer.isConnected) {
         NSLog(@"Already connected to %@", host);
+        if (completion) {
+            completion(peer, nil);
+        }
         return;
     }
-    
     //Create a new WebSocket connection
     SRWebSocket* sock = [allOutgoingSockets objectForKey:host];
     if (sock) {
@@ -347,6 +347,9 @@ typedef void(^WSVoidBlock)();
     sock.delegate = self;
     [sock open];
     [allOutgoingSockets setObject:sock forKey:host];
+    
+    //add peer to wait list
+    [hostsWaitingForConnection setObject:[completion copy] forKey:host];
 }
 
 - (void)sendSome:(id)data toPeer:(WSPeer*)peer {
@@ -371,11 +374,25 @@ typedef void(^WSVoidBlock)();
     NSLog(@"%@", logMessage);
     
     WSPeer* peer = [[WSPeer alloc] initWithOutgoingConnection:webSocket];
+    if ([hostsWaitingForConnection objectForKey:peer.host]) {
+        WSPeerConnectBlock block = [hostsWaitingForConnection objectForKey:peer.host];
+        block(peer, nil);
+        [hostsWaitingForConnection removeObjectForKey:peer.host];
+    }
     [self addPeer:peer];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
     NSLog(@"%@ :( Websocket Failed With Error: %@", NSStringFromClass(webSocket.class), error.description);
+    WSPeer* peer = [[WSPeer alloc] initWithOutgoingConnection:webSocket];
+    if ([hostsWaitingForConnection objectForKey:peer.host]) {
+        WSPeerConnectBlock block = [hostsWaitingForConnection objectForKey:peer.host];
+        block(peer, error);
+        [hostsWaitingForConnection removeObjectForKey:peer.host];
+    }
+    if ([_delegate respondsToSelector:@selector(agent:didReceiveError:forPeer:)]) {
+        [_delegate agent:self didReceiveError:error forPeer:peer];
+    }
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
@@ -395,10 +412,17 @@ typedef void(^WSVoidBlock)();
     NSString* logMessage = [NSString stringWithFormat:@"%@ : WebSocket closed with code: %ld, reason: %@", NSStringFromClass(webSocket.class), (long)code, reason];
     NSLog(@"%@", logMessage);
     
-    [allOutgoingSockets removeObjectForKey:webSocket.url.host];
+    NSString* host = webSocket.url.host;
+    
+    [allOutgoingSockets removeObjectForKey:host];
     
     if (code == -100 && [reason isEqualToString:@"reconnect"]) {
-        [self connectToHost:webSocket.url.host];
+        WSPeerConnectBlock block = nil;
+        if ([hostsWaitingForConnection objectForKey:host]) {
+            block = [[hostsWaitingForConnection objectForKey:host] copy];
+            [hostsWaitingForConnection removeObjectForKey:host];
+        }
+        [self connectToHost:webSocket.url.host withCompletion:block];
         return;
     }
     
