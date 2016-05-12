@@ -116,7 +116,16 @@
          senderDisplayName:(NSString *)senderDisplayName
                       date:(NSDate *)date
 {
-    
+    if ([text containsString:@"*"]) {
+        [self.navigationController popViewControllerAnimated:YES];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [NSThread sleepForTimeInterval:2.0f];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self didPressSendButton:button withMessageText:@"Test message" senderId:senderId senderDisplayName:senderDisplayName date:nil];
+            });
+        });
+        return;
+    }
     [JSQSystemSoundPlayer jsq_playMessageSentSound];
     [[WSAgent sharedInstance] sendSome:text toPeer:self.peer];
     [[MessagesStorage sharedInstance] addMessage:text from:senderId senderName:senderDisplayName date:nil];

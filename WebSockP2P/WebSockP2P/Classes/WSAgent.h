@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, WSAgentState) {
 #define DEFAULT_BONJOUR_SERVICE_TYPE @"_ws_peertopeer_test._tcp."
 #define DEFAULT_BONJOUR_SERVICE_NAME @"TestServer"
 #define DEFAULT_BONJOUR_SERVICE_DOMAIN @"local."
+#define WS_DISCOVER_MYSELF 0
 
 @class WSAgent;
 @class WSPeer;

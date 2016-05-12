@@ -55,7 +55,7 @@
 - (void)agent:(WSAgent *)agent didReceiveMessage:(id)message fromPeer:(WSPeer *)peer {
     NSUInteger idx = [[WSAgent sharedInstance].allPeers indexOfObject:peer];
     if (idx != NSNotFound) {
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathWithIndex:idx]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 

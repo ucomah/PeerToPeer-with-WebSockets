@@ -196,9 +196,11 @@
 
 - (void)findServices:(MEServiceFinder*)theFindServices didFindService:(MEService*)theService {
     //Forbid conencting to myself
+#if !WS_DISCOVER_MYSELF
     if ([theService.ipAddress isEqualToString:[NetUtils localIPAddress]]) {
         return;
     }
+#endif
     
     //Check if new service ip address is present in the peers list already
     WSPeer* peer = [self peerForHost:theService.hostName];
