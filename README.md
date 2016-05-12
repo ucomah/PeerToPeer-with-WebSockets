@@ -1,4 +1,8 @@
-# Peer-to-peer with WebSockets
+# Peer-to-peer chat with WebSockets
 
 This project demostrates the way to discover another iOS device in local network using Bonjour and establish conenction via WebScokets to transfer some data.
 Any iOS device can be the server and the client in the same time.
+
+### Usage
+
+You should have at least 2 iOS devices to try this sample. Both devices should start "listening" for incoming connections and disover each other over the network before they will be able to connect. Once one device is discovered by another - connection can be made and exhange can be started.
