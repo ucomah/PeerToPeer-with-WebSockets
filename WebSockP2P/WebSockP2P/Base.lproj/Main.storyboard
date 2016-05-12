@@ -82,7 +82,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="62"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5i3-le-TcM" id="Bji-iE-5NG">
-                                    <rect key="frame" x="0.0" y="0.0" width="567" height="62"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="61.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="192.168.0.1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wo2-L1-Cbm">
@@ -131,10 +131,31 @@
                             <outlet property="delegate" destination="tDJ-6S-uHJ" id="DyI-OW-IsS"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <segue destination="8cj-D8-Tjk" kind="show" identifier="showChat" action="showDetailViewController:sender:" id="fF3-lx-RAN"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Aq-ww-g10" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="988" y="-23"/>
+        </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="YBx-gY-GBT">
+            <objects>
+                <viewController storyboardIdentifier="ChatScreen" id="8cj-D8-Tjk" customClass="ChatViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8mc-jd-kBY"/>
+                        <viewControllerLayoutGuide type="bottom" id="Zhg-uz-ubx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="FDg-ao-7Zl">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GXZ-nB-sdR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1750" y="-23"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4qV-NO-kIn">

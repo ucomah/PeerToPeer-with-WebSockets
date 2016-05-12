@@ -84,6 +84,10 @@
     return _wsInPeer ? YES : NO;
 }
 
+- (NSString *)preferredName {
+    return self.bonjourName ? self.bonjourName : self.host;
+}
+
 #pragma mark - Actions
 
 - (void)closeConnection {

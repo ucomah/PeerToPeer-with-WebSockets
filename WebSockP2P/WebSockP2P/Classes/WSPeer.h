@@ -34,4 +34,6 @@
 
 - (BOOL)updateWithPeer:(WSPeer*)inPeer;
 
+- (NSString*)preferredName;
+
 @end

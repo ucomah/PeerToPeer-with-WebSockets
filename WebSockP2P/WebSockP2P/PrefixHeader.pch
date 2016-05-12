@@ -12,5 +12,6 @@
 #import "WSAgent.h"
 #import "UIApplication+TopMostController.h"
 #import "UIAlertController+DefaultAlerts.h"
+#import "MessagesStorage.h"
 
 #endif /* PrefixHeader_pch */

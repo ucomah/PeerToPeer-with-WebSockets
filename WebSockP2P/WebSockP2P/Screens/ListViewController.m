@@ -9,6 +9,7 @@
 #import "ListViewController.h"
 #import "DevicesListTableCell.h"
 #import "WSPeer.h"
+#import "ChatViewController.h"
 
 @interface ListViewController () <WSAgentDelegate>
 
@@ -87,7 +88,12 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         void(^showDetails)(WSPeer* peer) = ^(WSPeer* peer) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                //Update table
                 [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                //Show details controller
+                ChatViewController* chatScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatScreen"];
+                chatScreen.peer = peer;
+                [self.navigationController pushViewController:chatScreen animated:YES];
             });
         };
         //Connect if not connected
