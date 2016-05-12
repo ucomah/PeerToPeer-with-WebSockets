@@ -35,7 +35,7 @@
     self.senderId = _myHost;
     self.senderDisplayName = @"Me";
     
-    self.showLoadEarlierMessagesHeader = YES;
+    self.showLoadEarlierMessagesHeader = NO;
     
     //Create message bubble images objects.
     JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
@@ -72,7 +72,8 @@
         image = [info objectForKey:UIImagePickerControllerOriginalImage];
     }
     [[MessagesStorage sharedInstance] addPhotoMediaMessage:image from:self.senderId senderName:self.senderDisplayName];
-    [[WSAgent sharedInstance] sendSome:image toPeer:self.peer];
+    NSData* imageData = UIImagePNGRepresentation(image);
+    [[WSAgent sharedInstance] sendSome:imageData toPeer:self.peer];
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 

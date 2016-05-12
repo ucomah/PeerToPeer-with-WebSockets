@@ -13,7 +13,9 @@
 @property (nonatomic, weak) IBOutlet UIView* statuView;
 @property (nonatomic, weak) IBOutlet UILabel* hostNameLabel;
 @property (nonatomic, weak) IBOutlet UILabel* descriptionLabel;
+@property (nonatomic, weak) IBOutlet UILabel* messagesCountLabel;
 
 - (void)setIsConnected:(BOOL)isConnected;
+- (void)setMessagesCount:(NSUInteger)count;
 
 @end

@@ -52,6 +52,13 @@
     [self.tableView reloadData];
 }
 
+- (void)agent:(WSAgent *)agent didReceiveMessage:(id)message fromPeer:(WSPeer *)peer {
+    NSUInteger idx = [[WSAgent sharedInstance].allPeers indexOfObject:peer];
+    if (idx != NSNotFound) {
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathWithIndex:idx]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -78,6 +85,7 @@
     cell.hostNameLabel.text = [peer host];
     
     [cell setIsConnected:peer.isConnected];
+    [cell setMessagesCount:[[MessagesStorage sharedInstance] messagesForRemoteSenderId:peer.host].count];
     
     return cell;
 }
@@ -106,6 +114,7 @@
                 }
                 showDetails(peer);
             }];
+            return ;
         }
         showDetails(peer);
     });

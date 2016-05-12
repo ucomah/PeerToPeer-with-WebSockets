@@ -27,4 +27,8 @@
     self.descriptionLabel.text = isConnected ? @"Connected" : @"Not connected";
 }
 
+- (void)setMessagesCount:(NSUInteger)count {
+    self.messagesCountLabel.text = [NSString stringWithFormat:@"%lu", count];
+}
+
 @end
