@@ -16,4 +16,4 @@ NOTE: Even in the background mode, iOS will shout down your app after a 3 minute
 ### TODO
 1. Ping connections after app resigned active and cleanup the list.
 2. Possible crash when using UIApplication background modes.
-3. Connections list cleanup on app resign active.
+3. Peers list: swipe to disconnect.
