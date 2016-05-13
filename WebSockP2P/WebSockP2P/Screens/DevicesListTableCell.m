@@ -28,7 +28,7 @@
 }
 
 - (void)setMessagesCount:(NSUInteger)count {
-    self.messagesCountLabel.text = [NSString stringWithFormat:@"%lu", count];
+    self.messagesCountLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)count];
 }
 
 @end

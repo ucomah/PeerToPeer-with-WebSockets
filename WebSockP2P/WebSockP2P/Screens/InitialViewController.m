@@ -7,6 +7,7 @@
 //
 
 #import "InitialViewController.h"
+#import "NetUtils.h"
 
 @interface InitialViewController () <UITextFieldDelegate, WSAgentDelegate>
 
@@ -78,9 +79,11 @@ static int minLength = 5;
     [self.activity startAnimating];
     
     //Perform server start
+    [WSAgent sharedInstance].bonjourServiceName = self.nameField.text;
     [[WSAgent sharedInstance] startListeningWithCompletion:^(NSError *error) {
         [self.activity stopAnimating];
         if (!error) {
+            [MessagesStorage sharedInstance].myUserId = [NetUtils localIPAddress];
             [self performSegueWithIdentifier:@"showList" sender:self];
         }
         self.startButton.enabled = YES;

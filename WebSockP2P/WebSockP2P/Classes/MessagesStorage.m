@@ -9,6 +9,7 @@
 #import "MessagesStorage.h"
 #import "JSQMessage.h"
 #import "JSQPhotoMediaItem.h"
+#import "WSPeer.h"
 
 @interface MessagesStorage()
 @property (nonatomic, strong) NSMutableDictionary* allChats;
@@ -46,6 +47,7 @@
 
 - (void)addMessage:(NSString*)message
               from:(NSString*)senderId
+                to:(NSString*)receiverId
         senderName:(NSString*)senderName
               date:(NSDate*)date
 {
@@ -54,7 +56,8 @@
     }
     @synchronized (self) {
         //Get chat for sender
-        NSMutableArray* allMessages = [self messagesForRemoteSenderId:senderId];
+        BOOL isMeSender = [_myUserId isEqualToString:senderId];
+        NSMutableArray* allMessages = [self messagesForRemoteSenderId:(isMeSender ? receiverId : senderId )];
         JSQMessage* msg = [[JSQMessage alloc] initWithSenderId:senderId
                                              senderDisplayName:senderName
                                                           date:(date ? date : [NSDate date])
@@ -65,17 +68,32 @@
 
 - (void)addPhotoMediaMessage:(UIImage *)image
                         from:(NSString *)senderId
+                          to:(NSString*)receiverId
                   senderName:(NSString *)senderName
 {
     if (!image || !senderId) {
         return;
     }
     @synchronized (self) {
+        BOOL isMeSender = [_myUserId isEqualToString:senderId];
         JSQPhotoMediaItem *photoItem = [[JSQPhotoMediaItem alloc] initWithImage:image];
         JSQMessage *photoMessage = [JSQMessage messageWithSenderId:senderId
                                                        displayName:senderName
                                                              media:photoItem];
-        [[self messagesForRemoteSenderId:senderId] addObject:photoMessage];
+        [[self messagesForRemoteSenderId:(isMeSender ? receiverId : senderId )] addObject:photoMessage];
+    }
+}
+
+- (void)addMessage:(id)message fromPeer:(WSPeer*)peer {
+    if (!message || !peer) {
+        return;
+    }
+    if ([message isKindOfClass:[NSData class]]) { //Image
+        UIImage* image = [UIImage imageWithData:message];
+        [[MessagesStorage sharedInstance] addPhotoMediaMessage:image from:peer.host to:nil senderName:[peer preferredName]];
+    }
+    else if ([message isKindOfClass:[NSString class]]) { //Text
+        [[MessagesStorage sharedInstance] addMessage:message from:peer.host to:nil senderName:[peer preferredName] date:nil];
     }
 }
 

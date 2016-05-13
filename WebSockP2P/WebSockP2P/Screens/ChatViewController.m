@@ -65,16 +65,23 @@
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-    UIImage *image;
+    __block __strong UIImage *image;
     if ([info objectForKey:UIImagePickerControllerEditedImage]) {
         image = [info objectForKey:UIImagePickerControllerEditedImage];
     } else {
         image = [info objectForKey:UIImagePickerControllerOriginalImage];
     }
-    [[MessagesStorage sharedInstance] addPhotoMediaMessage:image from:self.senderId senderName:self.senderDisplayName];
-    NSData* imageData = UIImagePNGRepresentation(image);
-    [[WSAgent sharedInstance] sendSome:imageData toPeer:self.peer];
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [[MessagesStorage sharedInstance] addPhotoMediaMessage:image from:self.senderId to:self.peer.host senderName:self.senderDisplayName];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSData* imageData = UIImagePNGRepresentation(image);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[WSAgent sharedInstance] sendSome:imageData toPeer:self.peer];
+                [JSQSystemSoundPlayer jsq_playMessageSentSound];
+                [self finishSendingMessage];
+            });
+        });
+    }];
 }
 
 #pragma mark - WSAgent delegate
@@ -95,17 +102,21 @@
     if (![peer.host isEqualToString:self.peer.host]) {
         return;
     }
-    if ([message isKindOfClass:[NSData class]]) { //Image
-        UIImage* image = [UIImage imageWithData:message];
-        [[MessagesStorage sharedInstance] addPhotoMediaMessage:image from:peer.host senderName:[self.peer preferredName]];
+    [[MessagesStorage sharedInstance] addMessage:message fromPeer:peer];
+    [self finishReceivingMessage];
+    if ([message isKindOfClass:[NSData class]]) {
+        [self.collectionView layoutSubviews];
     }
-    else if ([message isKindOfClass:[NSString class]]) { //Text
-        [[MessagesStorage sharedInstance] addMessage:message from:peer.host senderName:[self.peer preferredName] date:nil];
-    }
-    [self finishReceivingMessageAnimated:YES];
 }
 
 - (void)agent:(WSAgent *)agent didReceiveError:(NSError *)error forPeer:(WSPeer *)peer {
+}
+
+- (void)agent:(WSAgent *)agent didRemovePeer:(WSPeer *)peer {
+    if (![peer.host isEqualToString:self.peer.host]) {
+        return;
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - JSQMessagesViewController method overrides
@@ -128,7 +139,7 @@
     }
     [JSQSystemSoundPlayer jsq_playMessageSentSound];
     [[WSAgent sharedInstance] sendSome:text toPeer:self.peer];
-    [[MessagesStorage sharedInstance] addMessage:text from:senderId senderName:senderDisplayName date:nil];
+    [[MessagesStorage sharedInstance] addMessage:text from:senderId to:self.peer.host senderName:senderDisplayName date:nil];
     [self finishSendingMessageAnimated:YES];
 }
 

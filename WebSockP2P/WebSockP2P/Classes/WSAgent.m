@@ -89,11 +89,11 @@
             }
         }];
     }];
-    [[UIApplication sharedApplication] startFineLengthBackgroundBlock:^{
+//    [[UIApplication sharedApplication] startFineLengthBackgroundBlock:^{
 //        while (1) {
 //            [NSThread sleepForTimeInterval:1.0];
 //        }
-    }];
+//    }];
 }
 
 - (void)stopListening {
@@ -219,7 +219,10 @@
 }
 
 - (void)findServices:(MEServiceFinder*)theFindServices didLoseService:(MEService*)theService {
-    
+    WSPeer* peer = [self peerForHost:theService.hostName];
+    if (peer) {
+        [self removePeer:peer];
+    }
 }
 
 - (void)findServices:(MEServiceFinder*)theFindServices didFailToSearch:(NSDictionary *)theErrors {

@@ -27,6 +27,7 @@
     [super viewDidAppear:animated];
     [WSAgent sharedInstance].delegate = self;
     [[WSAgent sharedInstance] startBonjourDiscovering];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -55,6 +56,7 @@
 - (void)agent:(WSAgent *)agent didReceiveMessage:(id)message fromPeer:(WSPeer *)peer {
     NSUInteger idx = [[WSAgent sharedInstance].allPeers indexOfObject:peer];
     if (idx != NSNotFound) {
+        [[MessagesStorage sharedInstance] addMessage:message fromPeer:peer];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
@@ -82,6 +84,7 @@
     }
     
     WSPeer* peer = [[WSAgent sharedInstance].allPeers objectAtIndex:indexPath.row];
+//    cell.hostNameLabel.text = [peer preferredName];
     cell.hostNameLabel.text = [peer host];
     
     [cell setIsConnected:peer.isConnected];
@@ -93,32 +96,32 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        void(^showDetails)(WSPeer* peer) = ^(WSPeer* peer) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                //Update table
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                //Show details controller
-                ChatViewController* chatScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatScreen"];
-                chatScreen.peer = peer;
-                [self.navigationController pushViewController:chatScreen animated:YES];
-            });
-        };
-        //Connect if not connected
-        WSPeer* peer = [[WSAgent sharedInstance].allPeers objectAtIndex:indexPath.row];
-        if (![peer isConnected]) {
-            [[WSAgent sharedInstance] connectToHost:peer.host withCompletion:^(WSPeer *peer, NSError *error) {
-                if (error) {
-                    [UIAlertController alertWithError:error withCompletion:nil];
-                    return ;
-                }
-                showDetails(peer);
-            }];
-            return ;
-        }
-        showDetails(peer);
-    });
+    void(^showDetails)(WSPeer* peer) = ^(WSPeer* peer) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //Update table
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            //Show details controller
+            ChatViewController* chatScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatScreen"];
+            chatScreen.peer = peer;
+            [self.navigationController pushViewController:chatScreen animated:YES];
+        });
+    };
+    //Connect if not connected
+    WSPeer* peer = [[WSAgent sharedInstance].allPeers objectAtIndex:indexPath.row];
+    if (![peer isConnected]) {
+        DevicesListTableCell *cell = (DevicesListTableCell*)[tableView dequeueReusableCellWithIdentifier:@"DevicesListViewCell" forIndexPath:indexPath];
+        cell.detailTextLabel.text = @"Connecting...";
+        [[WSAgent sharedInstance] connectToHost:peer.host withCompletion:^(WSPeer *peer, NSError *error) {
+            if (error) {
+                [UIAlertController alertWithError:error withCompletion:nil];
+                return ;
+            }
+            showDetails(peer);
+        }];
+        return ;
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    showDetails(peer);
 }
 
 @end
