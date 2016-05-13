@@ -96,6 +96,9 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     void(^showDetails)(WSPeer* peer) = ^(WSPeer* peer) {
         dispatch_async(dispatch_get_main_queue(), ^{
             //Update table
@@ -109,8 +112,6 @@
     //Connect if not connected
     WSPeer* peer = [[WSAgent sharedInstance].allPeers objectAtIndex:indexPath.row];
     if (![peer isConnected]) {
-        DevicesListTableCell *cell = (DevicesListTableCell*)[tableView dequeueReusableCellWithIdentifier:@"DevicesListViewCell" forIndexPath:indexPath];
-        cell.detailTextLabel.text = @"Connecting...";
         [[WSAgent sharedInstance] connectToHost:peer.host withCompletion:^(WSPeer *peer, NSError *error) {
             if (error) {
                 [UIAlertController alertWithError:error withCompletion:nil];
@@ -120,7 +121,6 @@
         }];
         return ;
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     showDetails(peer);
 }
 
