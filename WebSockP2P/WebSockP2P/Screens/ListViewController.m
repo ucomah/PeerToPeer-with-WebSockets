@@ -84,8 +84,8 @@
     }
     
     WSPeer* peer = [[WSAgent sharedInstance].allPeers objectAtIndex:indexPath.row];
-//    cell.hostNameLabel.text = [peer preferredName];
-    cell.hostNameLabel.text = [peer host];
+    cell.hostNameLabel.text = [peer preferredName];
+//    cell.hostNameLabel.text = [peer host];
     
     [cell setIsConnected:peer.isConnected];
     [cell setMessagesCount:[[MessagesStorage sharedInstance] messagesForRemoteSenderId:peer.host].count];
