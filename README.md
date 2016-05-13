@@ -3,6 +3,10 @@
 This project demonstrates the way to discover another iOS device in local network using Bonjour and establish a connection via WebSockets to transfer any kind of data.
 Any iOS device can be the server and the client in the same time.
 
+![1](./ReadMe_Assets/1.png)
+![2](./ReadMe_Assets/2.png)
+![3](./ReadMe_Assets/3.png)
+
 ### Usage
 
 You should have at least 2 iOS devices to try this sample. Both devices should start "listening" for incoming connections and discover each other over the network before they will be able to connect. Once one device is discovered by another - connection can be made and exchange can be started.
