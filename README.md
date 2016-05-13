@@ -3,9 +3,9 @@
 This project demonstrates the way to discover another iOS device in local network using Bonjour and establish a connection via WebSockets to transfer any kind of data.
 Any iOS device can be the server and the client in the same time.
 
-![1](./ReadMe_Assets/1.png)
-![2](./ReadMe_Assets/2.png)
-![3](./ReadMe_Assets/3.png)
+<img src="./ReadMe_Assets/1.png" width="180">
+<img src="./ReadMe_Assets/2.png" width="180">
+<img src="./ReadMe_Assets/3.png" width="180">
 
 ### Usage
 
