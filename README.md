@@ -1,7 +1,3 @@
-#### NOTE: This project is under development! This message will be removed when workable prototype will arrive
-
---
-
 # Peer-to-peer chat with WebSockets
 
 This project demostrates the way to discover another iOS device in local network using Bonjour and establish conenction via WebScokets to transfer some data.
