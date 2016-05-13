@@ -69,14 +69,14 @@
 #pragma mark - Initialization
 
 - (instancetype)initWithMode:(PSWebSocketMode)mode request:(NSURLRequest *)request {
-	if((self = [super init])) {
-        _url = request.URL;
+    if((self = [super init])) {
         _mode = mode;
         _request = [request mutableCopy];
 		_readyState = PSWebSocketReadyStateConnecting;
         _workQueue = dispatch_queue_create(nil, nil);
         if(_mode == PSWebSocketModeClient) {
             _driver = [PSWebSocketDriver clientDriverWithRequest:_request];
+            _url = request.URL;
         } else {
             _driver = [PSWebSocketDriver serverDriverWithRequest:_request];
         }

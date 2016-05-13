@@ -45,6 +45,9 @@ typedef NS_ENUM(NSInteger, PSWebSocketServerConnectionReadyState) {
 @property (nonatomic, strong) PSWebSocketBuffer *inputBuffer;
 @property (nonatomic, strong) PSWebSocketBuffer *outputBuffer;
 
+@property (nonatomic, strong) NSString* clientIP;
+@property (nonatomic, assign) NSInteger clientPort;
+
 @end
 @implementation PSWebSocketServerConnection
 
@@ -236,6 +239,21 @@ void PSWebSocketServerAcceptCallback(CFSocketRef s, CFSocketCallBackType type, C
 
 - (void)accept:(CFSocketNativeHandle)handle {
     [self executeWork:^{
+        
+        //Get IP address of just connected client
+        NSInteger clientPort = 0;
+        NSString* clientIP = nil;
+        struct sockaddr_in addr ;
+        socklen_t len = sizeof(addr) ;
+        int res = getpeername(handle, (struct sockaddr *)&addr, &len) ;
+        if (res == 0) {
+            char strAddr[20] ;
+            inet_ntop(AF_INET, &addr.sin_addr, strAddr, sizeof(strAddr)) ;
+            clientIP = [NSString stringWithFormat:@"%s", strAddr];
+            clientPort = addr.sin_port;
+        }
+        
+        
         // create streams
         CFReadStreamRef readStream = nil;
         CFWriteStreamRef writeStream = nil;
@@ -265,6 +283,8 @@ void PSWebSocketServerAcceptCallback(CFSocketRef s, CFSocketCallBackType type, C
         PSWebSocketServerConnection *connection = [[PSWebSocketServerConnection alloc] init];
         connection.inputStream = CFBridgingRelease(readStream);
         connection.outputStream = CFBridgingRelease(writeStream);
+        connection.clientPort = clientPort;
+        connection.clientIP = [clientIP copy];
         
         // attach connection
         [self attachConnection:connection];
@@ -457,6 +477,7 @@ void PSWebSocketServerAcceptCallback(CFSocketRef s, CFSocketCallBackType type, C
             
             // create webSocket
             PSWebSocket *webSocket = [PSWebSocket serverSocketWithRequest:request inputStream:connection.inputStream outputStream:connection.outputStream];
+            webSocket.url = [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@:%ld", request.URL.scheme, connection.clientIP, (long)connection.clientPort]];
             
             // attach webSocket
             [self attachWebSocket:webSocket];
